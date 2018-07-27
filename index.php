@@ -6,11 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Fine Uploader New/Modern CSS file
     ====================================================================== -->
-    <link href="cdn/fine-uploader-new.css" rel="stylesheet">
+    <link href="./cdn/fine-uploader-new.css" rel="stylesheet">
     <!-- Fine Uploader JS file
     ====================================================================== -->
-    <script src="cdn/fine-uploader.js"></script>
-
+    <script src="./cdn/fine-uploader.js"></script>
+    <?php
+    error_reporting(0);
+    ?>
     <!-- Fine Uploader Thumbnails template w/ customization
     ====================================================================== -->
     <script type="text/template" id="qq-template-manual-trigger">
@@ -107,7 +109,7 @@
     <div id="fine-uploader-manual-trigger"></div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <?php
-    $dir    = $_SERVER['DOCUMENT_ROOT'].'/fineupload/uploads/';
+    $dir    = './uploads';
     $fileCdn  =  $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'].'uploads/';
     if (is_dir($dir)){
       if ($dh = opendir($dir)){
@@ -136,6 +138,20 @@
                 placeholders: {
                     waitingPath: './placeholders/waiting-generic.png',
                     notAvailablePath: './placeholders/not_available-generic.png'
+                }
+            },
+            validation: {
+                allowedExtensions: ['jpeg', 'jpg', 'gif', 'png'],
+                itemLimit: 5,
+                sizeLimit: 1048576 // 1024 kB = 50 * 1024 bytes
+            },
+            callbacks: {
+                onComplete: function(id, name, response) {
+                    if (response.success) {
+                        window.location.reload();
+                    }else{
+                        alert(response.error);
+                    }
                 }
             },
             autoUpload: false,
